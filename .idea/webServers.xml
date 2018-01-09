@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="7770c586-013f-4c33-a7cd-5112a5a0d539" name="Smep" url="http://mascitra.com/smep">
+        <fileTransfer host="mascitra.com" port="21" rootFolder="/smep">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
