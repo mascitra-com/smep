@@ -22,7 +22,7 @@
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://182.253.186.245/smep';
+$config['base_url'] = 'http://localhost/smep';
 $config['fonts_path']= 'system/font/';
 /*
 |--------------------------------------------------------------------------

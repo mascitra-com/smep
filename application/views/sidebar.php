@@ -21,7 +21,7 @@
                   <?php if(in_array($this->session->userdata('level'), array(1, 3, 5))) { ?>
                   <li><a><i class="fa fa-table"></i> Laporan <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><?php echo anchor('/report/report_form', 'Cetak Laporan'); ?></li>
+                      <li><?php echo anchor('/report/form', 'Cetak Laporan'); ?></li>
                     </ul>
                   </li>
                   <?php } ?>
