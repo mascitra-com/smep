@@ -52,7 +52,7 @@
                           <td><?php echo $d->nama_satker; ?></td>
                           <td><?php echo $d->lokasi; ?></td>
                           <td style="text-align: center; width: 40px">
-                              <a data-toggle="tooltip" data-placement="top" title="View RUP" href="<?php echo base_url() . "index.php/rup/form/" . $d->id . "/ /view"; ?>"><i class="fa fa-eye"></i> View</a><br>
+                              <a data-toggle="tooltip" data-placement="top" title="View RUP" href="<?php echo base_url() . "index.php/rup/form/" . $d->id . "/view"; ?>"><i class="fa fa-eye"></i> View</a><br>
                               <a data-toggle="tooltip" data-placement="top" title="Ubah RUP" href="<?php echo base_url() . "index.php/rup/form/" . $d->id; ?>"><img src="<?php echo base_url() . 'images/application_form_edit.png'; ?>" /> Edit</a><br>
                               <a data-toggle="tooltip" data-placement="top" title="Hapus RUP" href="<?php echo base_url() . "index.php/rup/hapus/" . $d->id; ?>" onclick="return confirm('Hapus data rup?');"><img src="<?php echo base_url() . 'images/cross.png'; ?>"/> Hapus</a>
                           </td>

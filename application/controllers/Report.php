@@ -34,6 +34,7 @@ class Report extends CI_Controller
 
     function cetak()
     {
+        $bulan = $this->input->post('bulan');
         switch ($this->input->post('jenis_report')) {
             case 'report1':
                 $this->report1();
@@ -45,7 +46,10 @@ class Report extends CI_Controller
                 $this->report3();
                 break;
             case 'report4':
-                $this->report4();
+                $this->report4($bulan);
+                break;
+            case 'report5':
+                $this->report5($bulan);
                 break;
         }
     }
@@ -155,71 +159,112 @@ class Report extends CI_Controller
         $this->load->view('report3', $params);
     }
 
-    public function report4()
+    public function report4($bulan)
+    {
+        $satker = $this->db->select('id, namasatker')
+            ->from('satker')
+            ->get()->result_array();
+        $satker = $this->subtitute($this->get_report($bulan), $satker, 'total');
+        $data['satker'] = $satker;
+        $data['bulan'] = $bulan;
+        $this->load->view('report4', $data);
+    }
+
+    public function report5($bulan)
+    {
+        $this->load->helper('utilities');
+        $satker = $this->db->select('id, namasatker')
+            ->from('satker')
+            ->get()->result_array();
+        $satker = $this->subtitute($this->get_report($bulan), $satker, 'pagu');
+        $data['satker'] = $satker;
+        $data['bulan'] = $bulan;
+        $this->load->view('report5', $data);
+    }
+
+    /**
+     * @param $condition
+     * @param $satker
+     * @return mixed
+     */
+    private function subtitute($condition, $satker, $column)
+    {
+        foreach ($condition as $keyCondition => $cond) {
+            foreach ($cond as $keyCond => $c){
+                foreach ($satker as $keySatker => $satuan) {
+                    if ($c['id_satker'] == $satuan['id']) {
+                        $satker["{$keySatker}"]["{$keyCondition}"] = (int) $c["{$column}"];
+                    }
+                }
+            }
+        }
+        return $satker;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function get_report($bulan = NULL)
     {
         // Master Query
         $this->db->start_cache();
-        $this->db->select('satker.id as ID')
+        $this->db->select('satker.id as id_satker, count(rup.satker_id) as total, SUM(rup.pagu) as pagu')
             ->from('satker')
             ->join('rup', 'satker.id = rup.satker_id', 'left outer')
+            ->where('rup.metode_awal', $bulan)
             ->group_by("satker.id");
+        // TODO Bulan
         $this->db->stop_cache();
         // Total
-        $total = $this->db->get()->result_array();
+        $data['total'] = $this->db->get()->result_array();
         // Barang / Jasa - Lelang Umum
-        $cond1 = $this->db->select('count(rup.satker_id) as lelang_umum')->where('rup.metode_pemilihan_id', '1')
-            ->or_where('rup.metode_pemilihan_id', '12')->get();
+        $this->db->where('rup.metode_pemilihan_id', '1')
+            ->or_where('rup.metode_pemilihan_id', '12');
+        $data['lelang_umum'] = $this->db->get()->result_array();
         // Barang / Jasa - Lelang Sederhana
         $this->db->where('rup.metode_pemilihan_id', '3')
             ->or_where('rup.metode_pemilihan_id', '13');
-        $cond2 = $this->db->get()->result_array();
+        $data['lelang_sederhana'] = $this->db->get()->result_array();
         // Konstruksi - Pelelangan Umum
         $this->db->where('rup.metode_pemilihan_id', '7');
-        $cond3 = $this->db->get()->result_array();
+        $data['umum'] = $this->db->get()->result_array();
         // Konstruksi - Pemilihan Langsung
         $this->db->where('rup.metode_pemilihan_id', '9');
-        $cond4 = $this->db->get()->result_array();
+        $data['pemilihan_langsung'] = $this->db->get()->result_array();
         // Konsultan - Seleksi Umum
         $this->db->where('rup.metode_pemilihan_id', '16');
-        $cond5 = $this->db->get()->result_array();
+        $data['seleksi_umum'] = $this->db->get()->result_array();
         // Konsultan - Seleksi Sederhana
         $this->db->where('rup.metode_pemilihan_id', '17');
-        $cond6 = $this->db->get()->result_array();
+        $data['seleksi_sederhana'] = $this->db->get()->result_array();
 
         // Dibawah 200jt / Non - Barang /Jasa
         $this->db->where('rup.metode_pemilihan_id', '5')
             ->or_where('rup.metode_pemilihan_id', '15');
-        $cond7 = $this->db->get()->result_array();
+        $data['barang_jasa'] = $this->db->get()->result_array();
         // Dibawah 200jt / Non - Konstruksi
         $this->db->where('rup.metode_pemilihan_id', '11');
-        $cond8 = $this->db->get()->result_array();
+        $data['konstruksi'] = $this->db->get()->result_array();
         // Dibawah 200jt / Non - Konsultasi
         $this->db->where('rup.metode_pemilihan_id', '19');
-        $cond9 = $this->db->get()->result_array();
+        $data['konsultan'] = $this->db->get()->result_array();
 
         // E-Purchasing
         $this->db->where('rup.metode_pemilihan_id', '6');
-        $cond10 = $this->db->get()->result_array();
+        $data['e_purchasing'] = $this->db->get()->result_array();
         // Penunjukan Langsung
         $this->db->where('rup.metode_pemilihan_id', '4')
             ->or_where('rup.metode_pemilihan_id', '10')
             ->or_where('rup.metode_pemilihan_id', '14')
             ->or_where('rup.metode_pemilihan_id', '18');
         $this->db->where('rup.pengadaan_melalui_id', '1');
-        $cond11 = $this->db->get()->result_array();
+        $data['penunjukan'] = $this->db->get()->result_array();
         // Swakelola
         $this->db->where('rup.pengadaan_melalui_id', '1');
-        $cond12 = $this->db->get()->result_array();
+        $data['swakelola'] = $this->db->get()->result_array();
 
         // Flush Cache
         $this->db->flush_cache();
-        $satker = $this->db->select('id, namasatker')
-            ->from('satker')
-            ->limit(1)
-            ->get();
-        var_dump(print_r($cond1));
-        $query = "SELECT * FROM ({$satker} UNION {$cond1}) as q";
-        $result = $this->db->query($query)->result();
-
+        return $data;
     }
 }
