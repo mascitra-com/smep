@@ -34,7 +34,7 @@ class Report extends CI_Controller
 
     function cetak()
     {
-        $bulan = $this->input->post('bulan');
+        $tgl = $this->input->post('tgl');
         switch ($this->input->post('jenis_report')) {
             case 'report1':
                 $this->report1();
@@ -46,10 +46,10 @@ class Report extends CI_Controller
                 $this->report3();
                 break;
             case 'report4':
-                $this->report4($bulan);
+                $this->report4($tgl);
                 break;
             case 'report5':
-                $this->report5($bulan);
+                $this->report5($tgl);
                 break;
         }
     }
@@ -159,26 +159,26 @@ class Report extends CI_Controller
         $this->load->view('report3', $params);
     }
 
-    public function report4($bulan)
+    public function report4($tgl)
     {
         $satker = $this->db->select('id, namasatker')
             ->from('satker')
             ->get()->result_array();
-        $satker = $this->subtitute($this->get_report($bulan), $satker, 'total');
+        $satker = $this->subtitute($this->get_report($tgl), $satker, 'total');
         $data['satker'] = $satker;
-        $data['bulan'] = $bulan;
+        $data['bulan'] = $tgl;
         $this->load->view('report4', $data);
     }
 
-    public function report5($bulan)
+    public function report5($tgl)
     {
         $this->load->helper('utilities');
         $satker = $this->db->select('id, namasatker')
             ->from('satker')
             ->get()->result_array();
-        $satker = $this->subtitute($this->get_report($bulan), $satker, 'pagu');
+        $satker = $this->subtitute($this->get_report($tgl), $satker, 'pagu');
         $data['satker'] = $satker;
-        $data['bulan'] = $bulan;
+        $data['bulan'] = $tgl;
         $this->load->view('report5', $data);
     }
 
@@ -204,14 +204,16 @@ class Report extends CI_Controller
     /**
      * @return mixed
      */
-    private function get_report($bulan = NULL)
+    private function get_report($tgl = NULL)
     {
+        $bulan = "(rup.metode_awal BETWEEN 1 AND ".date('m', strtotime($tgl)) . ")";
         // Master Query
         $this->db->start_cache();
         $this->db->select('satker.id as id_satker, count(rup.satker_id) as total, SUM(rup.pagu) as pagu')
             ->from('satker')
             ->join('rup', 'satker.id = rup.satker_id', 'left outer')
-            ->where('rup.metode_awal', $bulan)
+            ->where($bulan)
+            ->where('rup.tahun_anggaran', $this->session->userdata('tahun_anggaran'))
             ->group_by("satker.id");
         // TODO Bulan
         $this->db->stop_cache();

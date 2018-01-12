@@ -73,20 +73,6 @@ require_once("topnav.php");
                                     </select>
                                 </div>
                             </div>
-                            <?php
-                            $arr_bulan = array('Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'Nopember', 'Desember');
-                            $i = 1;
-                            ?>
-                            <div class="item form-group" id="bulan">
-                                <label for="bulan" class="control-label col-md-3 col-sm-3 col-xs-12"> Bulan</label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <select class="form-control" name="bulan">
-                                        <?php foreach ($arr_bulan as $bulan): ?>
-                                            <option value="<?= $i++ ?>"><?= $bulan ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                            </div>
                             <div class="ln_solid"></div>
                             <div class="form-group">
                                 <div class="col-md-6 col-md-offset-3">
@@ -174,6 +160,8 @@ require_once("topnav.php");
         $('#tgl').daterangepicker({
             singleDatePicker: true,
             singleClasses: "picker_2",
+            startDate: "<?="1/1/".$this->session->userdata('tahun_anggaran')?>",
+            endDate: "<?="31/12/".$this->session->userdata('tahun_anggaran')?>",
             locale: {
                 format: 'DD/MM/YYYY'
             }
@@ -186,19 +174,6 @@ require_once("topnav.php");
         $(".select2_satker").select2({
             placeholder: "Pilih Satker",
             allowClear: true
-        });
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        $('#bulan').hide();
-        $("#jenis_report").on('change', function () {
-            var jenis_report = this.value;
-            if (jenis_report === 'report4' || jenis_report === 'report5' || jenis_report === 'report6') {
-                $('#bulan').show();
-            } else {
-                $('#bulan').hide();
-            }
         });
     });
 </script>
