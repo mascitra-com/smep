@@ -137,4 +137,58 @@ class Program_m extends MY_Model
         return $arr;
     }
 
+    public function get_monev($bulan, $satker_id = NULL)
+    {
+        $this->db->select('program.id, namaprogram');
+        $this->db->from('program');
+        $this->db->join('rup', 'program.id = rup.program_id');
+        $this->db->where('rup.waktu_akhir <=', $bulan);
+        if($satker_id)
+            $this->db->where('rup.satker_id', $satker_id);
+        $this->db->group_by('program.id');
+        $program =  $this->db->get()->result_array();
+        foreach ($program as $keyPro => $valPro) {
+            // Get Kegiatan
+            $this->db->select('id, kdkegiatan, namakegiatan');
+            $this->db->from('kegiatan');
+            $this->db->where('program_id', $valPro['id']);
+            $kegiatan = $this->db->get()->result_array();
+            foreach ($kegiatan as $keyKeg => $valKeg){
+                $program[$keyPro]['kegiatan'][$keyKeg] = $valKeg;
+
+                // Get RUP
+                $this->db->select('id, jenis_belanja_id, nama_paket, lokasi, volume, sumber_dana, pagu, tahun_anggaran');
+                $this->db->from('rup');
+                $this->db->where('kegiatan_id', $valKeg['id']);
+                $rup = $this->db->get()->result_array();
+                if($rup) {
+                    foreach ($rup as $keyRup => $valRup) {
+
+                        // Get Proyek
+                        $this->db->select('id, nama_ppk, nilai_kontrak, tgl_kontrak, tgl_selesai_kontrak, nama_perusahaan');
+                        $this->db->from('proyek');
+                        $this->db->where('rup_id', $valRup['id']);
+                        $proyek = $this->db->get()->result_array();
+                        if ($proyek) {
+                            $program[$keyPro]['kegiatan'][$keyKeg]['rup'][$keyRup] = $valRup;
+                            foreach ($proyek as $keyProyek => $valProyek) {
+                                $program[$keyPro]['kegiatan'][$keyKeg]['rup'][$keyRup]['proyek'][$keyProyek] = $valProyek;
+
+                                $this->db->select('id, tgl, jumlah');
+                                $this->db->from('realisasi_keuangan');
+                                $this->db->where('proyek_id', $valProyek['id']);
+                                $realisasi = $this->db->get()->result_array();
+                                if ($realisasi) {
+                                    foreach ($realisasi as $keyRea => $valRea) {
+                                        $program[$keyPro]['kegiatan'][$keyKeg]['rup'][$keyRup]['proyek'][$keyProyek]['realisasi_keuangan'][$keyRea] = $valRea;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $program;
+    }
 }

@@ -36,6 +36,7 @@ class Report extends CI_Controller
     function cetak()
     {
         $tgl = $this->input->post('tgl');
+        $satker_id = $this->input->post('satker_id');
         switch ($this->input->post('jenis_report')) {
             case 'report1':
                 $this->report1();
@@ -53,7 +54,7 @@ class Report extends CI_Controller
                 $this->report5($tgl);
                 break;
             case 'report6':
-                $this->report6($tgl);
+                $this->report6($tgl, $satker_id);
                 break;
         }
     }
@@ -185,31 +186,12 @@ class Report extends CI_Controller
         $this->load->view('report5', $data);
     }
 
-    public function report6($tgl)
+    public function report6($tgl, $satker_id = NULL)
     {
         $this->load->model(array('program_m', 'sumber_dana_m'));
         $this->load->helper('dump');
         $data['bulan'] = DateTime::createFromFormat('d/m/Y', $tgl)->format('m');
-        $laporan = $this->program_m
-            ->fields('namaprogram')
-            ->with_kegiatan(array(
-                'fields' => 'kdkegiatan, namakegiatan',
-                'with' => array(
-                    'relation' => 'rup',
-                    'fields' => 'id, jenis_belanja_id, nama_paket, lokasi, volume, sumber_dana, pagu, tahun_anggaran',
-                    'with' => array(
-                        'relation' => 'proyek',
-                        'fields' => 'id, nama_ppk, nilai_kontrak, tgl_kontrak, tgl_selesai_kontrak, nama_perusahaan',
-                        'with' => array(
-                            'relation' => 'realisasi_keuangan',
-                            'fields' => 'tgl, jumlah'
-                        )
-                    ),
-                    'where' => "tahun_anggaran = " . $this->session->userdata('tahun_anggaran')
-                ),
-            ))
-            ->as_array()
-            ->get_all();
+        $laporan = $this->program_m->get_monev($data['bulan'], $satker_id);
         $laporan = $this->program_m->filter_proyek($laporan);
         $data['program'] = $laporan;
         $data['sumber_dana'] = $this->sumber_dana_m->get_all();

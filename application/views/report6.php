@@ -41,7 +41,7 @@
 <h5 align="center">DI LINGKUNGAN PEMERINTAH KABUPATEN LUMAJANG TAHUN
     ANGGARAN <?= $this->session->userdata('tahun_anggaran') ?></h5>
 <h5 ALIGN="center">
-    BAGIAN <?= strtoupper($arr_bulan[$bulan - 1]) ?> <?= $this->session->userdata('tahun_anggaran') ?></h5>
+    SAMPAI DENGAN BULAN <?= strtoupper($arr_bulan[$bulan - 1]) ?> <?= $this->session->userdata('tahun_anggaran') ?></h5>
 
 <table width="100%">
     <?php $count_sd = count((array)$sumber_dana); ?>

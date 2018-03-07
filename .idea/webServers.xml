@@ -5,7 +5,7 @@
       <webServer id="7770c586-013f-4c33-a7cd-5112a5a0d539" name="Smep" url="https://smep.lumajangkab.go.id">
         <fileTransfer host="ftp.smep.lumajangkab.go.id" port="21">
           <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" />
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
           </advancedOptions>
           <option name="port" value="21" />
         </fileTransfer>
