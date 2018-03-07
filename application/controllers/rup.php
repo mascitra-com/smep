@@ -25,8 +25,9 @@ class Rup extends CI_Controller {
 		$filter = "";
 		if ($this->session->userdata('level') == 4 || $this->session->userdata('level') == 6) {
 			$filter = sprintf(" AND a.satker_id=%d", $this->session->userdata('satker_id'));
-		}
-
+		} else if($satker_id = $this->input->get('satker_id')){
+            $filter = sprintf(" AND a.satker_id=%d", $satker_id);
+        }
 		$sql = sprintf("
 			SELECT
 				a.`id`, a.`id_rup`, a.`satker_id`, f.namasatker nama_satker, a.`tahun_anggaran`, a.`program_id`, a.`kegiatan_id`,
@@ -46,8 +47,10 @@ class Rup extends CI_Controller {
 		", $this->session->userdata('tahun_anggaran'));
 
 		$q = $this->db->query($sql);
-
 		$data['data'] = $q->result_object();
+
+        $q=$this->db->get('satker');
+        $data['satker'] = $q->result_object();
 
 		$this->load->view('rup', $data);
 	}
@@ -137,6 +140,8 @@ class Rup extends CI_Controller {
 			$q_kegiatan = $this->db->get_where('kegiatan', array('program_id' => $data['program_id']));
 			$params['kegiatan'] = $q_kegiatan->result_object();
 		}
+		$this->load->model('sumber_dana_m');
+        $params['sumber_dana'] = $this->sumber_dana_m->get_all();
         if($view == 'view'){
             $this->load->view('rup_view', $params);
         } else {

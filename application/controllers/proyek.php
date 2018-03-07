@@ -26,7 +26,9 @@ class Proyek extends CI_Controller {
 		$filter = "";
 		if($this->session->userdata('level') == 4 || $this->session->userdata('level') == 6) {
 			$filter = sprintf(" AND b.satker_id=%d", $this->session->userdata('satker_id'));
-		}
+		} else if($satker_id = $this->input->get('satker_id')){
+            $filter = sprintf(" AND b.satker_id=%d", $satker_id);
+        }
 
 		$sql = sprintf("
 			SELECT 
@@ -63,7 +65,10 @@ class Proyek extends CI_Controller {
 			}
 			$q[$key]->sumberdana = $sumberdana;
 		}
-		$data['data'] = $q;	
+		$data['data'] = $q;
+
+        $q=$this->db->get('satker');
+        $data['satker'] = $q->result_object();
 
         $this->load->view('proyek', $data);
     }

@@ -208,7 +208,7 @@ require_once("topnav.php");
                                         foreach ($sdana as $s)
                                         {
                                         ?>
-                                        <option value="<?php echo $s->id; ?>"<?php echo in_array($s->id, $sumber_dana) ? " selected=\"selected\"" : ""; ?>><?php echo $s->nama; ?></value>
+                                            <option value="<?php echo $s->id; ?>"<?php echo in_array($s->id, $sumber_dana) ? " selected=\"selected\"" : ""; ?>><?php echo $s->nama; ?></option>
                                             <?php
                                             }
                                             ?>
@@ -225,7 +225,7 @@ require_once("topnav.php");
                                         foreach ($jenis_belanja as $j)
                                         {
                                         ?>
-                                        <option value="<?php echo $j->id; ?>"<?php echo $j->id == $rup->jenis_belanja_id ? " selected" : ''; ?>><?php echo $j->nama; ?></value>
+                                            <option value="<?php echo $j->id; ?>"<?php echo $j->id == $rup->jenis_belanja_id ? " selected" : ''; ?>><?php echo $j->nama; ?></option>
                                             <?php
                                             }
                                             ?>
@@ -242,7 +242,7 @@ require_once("topnav.php");
                                         foreach ($jenis_pengadaan as $j)
                                         {
                                         ?>
-                                        <option value="<?php echo $j->id; ?>"<?php echo $j->id == $rup->jenis_pengadaan_id ? " selected=\"selected\"" : ''; ?>><?php echo $j->nama; ?></value>
+                                            <option value="<?php echo $j->id; ?>"<?php echo $j->id == $rup->jenis_pengadaan_id ? " selected=\"selected\"" : ''; ?>><?php echo $j->nama; ?></option>
                                             <?php
                                             }
                                             ?>
@@ -257,7 +257,7 @@ require_once("topnav.php");
                                     
                                     <input name="metode_pemilihan_id" type="hidden" value="<?=$rup->metode_pemilihan_id?>" />
                                     <select class="form-control" id="metode_pemilihan_id" disabled>
-                                        <option value="<?php echo $rup->metode_pemilihan_id ?>" selected><?php echo $rup->nama_metode_pemilihan; ?></value>
+                                        <option value="<?php echo $rup->metode_pemilihan_id ?>" selected><?php echo $rup->nama_metode_pemilihan; ?></option>
                                     </select>
                                 </div>
                             </div>
@@ -428,7 +428,7 @@ require_once("topnav.php");
                                         foreach ($progres as $p)
                                         {
                                         ?>
-                                        <option value="<?php echo $p->id; ?>"<?php echo $p->id == $data['progres_id'] ? " selected=\"selected\"" : ''; ?>><?php echo $p->nama; ?></value>
+                                            <option value="<?php echo $p->id; ?>"<?php echo $p->id == $data['progres_id'] ? " selected=\"selected\"" : ''; ?>><?php echo $p->nama; ?></option>
                                             <?php
                                             }
                                             ?>
@@ -455,7 +455,7 @@ require_once("topnav.php");
                                     echo '<div class="row section">';
                                 } ?>
                                 <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-                                    <?php if (in_array($photo->ext, array('.jpg', '.jpeg', '.png'))) : ?>
+                                    <?php if (in_array($photo->ext, array('.jpg', '.jpeg', '.png', '.JPG'))) : ?>
 
                                     <div class="thumb">
                                         <input id="link-<?= $photo->id ?>" value="<?= $photo->photo ?>" hidden/>

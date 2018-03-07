@@ -66,25 +66,39 @@
     </tr>
     </thead>
     <tbody>
-        <?php $i = 1; foreach ($satker as $list) { ?>
+        <?php $i = 1; $keys = array('total', 'lelang_umum','lelang_sederhana', 'umum', 'pemilihan_langsung', 'seleksi_umum',
+            'seleksi_sederhana', 'barang_jasa', 'konstruksi', 'konsultan', 'e_purchasing', 'penunjukan', 'swakelola');
+        $jumlah = array_fill_keys($keys, 0);
+        foreach ($satker as $list) {
+            foreach ($keys as $key){
+                $jumlah["{$key}"] += isset($list["{$key}"]) ? (int) $list["{$key}"] : 0;
+            }
+            ?>
         <tr>
             <td class="text-center"><?=$i++?></td>
             <td><?=$list['namasatker']?></td>
-            <td class="text-center"><?=(empty($list['total']) ? '-' : $list['total'])?></td>
-            <td class="text-center"><?=(!isset($list['lelang_umum']) ? '-' : $list['lelang_umum'])?></td>
-            <td class="text-center"><?=(!isset($list['lelang_sederhana']) ? '-' : $list['lelang_sederhana'])?></td>
-            <td class="text-center"><?=(!isset($list['umum']) ? '-' : $list['umum'])?></td>
-            <td class="text-center"><?=(!isset($list['pemilihan_langsung']) ? '-' : $list['pemilihan_langsung'])?></td>
-            <td class="text-center"><?=(!isset($list['seleksi_umum']) ? '-' : $list['seleksi_umum'])?></td>
-            <td class="text-center"><?=(!isset($list['seleksi_sederhana']) ? '-' : $list['seleksi_sederhana'])?></td>
-            <td class="text-center"><?=(!isset($list['barang_jasa']) ? '-' : $list['barang_jasa'])?></td>
-            <td class="text-center"><?=(!isset($list['konstruksi']) ? '-' : $list['konstruksi'])?></td>
-            <td class="text-center"><?=(!isset($list['konsultan']) ? '-' : $list['konsultan'])?></td>
-            <td class="text-center"><?=(!isset($list['e_purchasing']) ? '-' : $list['e_purchasing'])?></td>
-            <td class="text-center"><?=(!isset($list['penunjukan']) ? '-' : $list['penunjukan'])?></td>
-            <td class="text-center"><?=(!isset($list['swakelola']) ? '-' : $list['swakelola'])?></td>
+            <td class="text-center"><?=(!isset($list['total']) ? '- ' : (int) $list['total'])?></td>
+            <td class="text-center"><?=(!isset($list['lelang_umum']) ? '- ' : (int) $list['lelang_umum'])?></td>
+            <td class="text-center"><?=(!isset($list['lelang_sederhana']) ? '- ' : (int) $list['lelang_sederhana'])?></td>
+            <td class="text-center"><?=(!isset($list['umum']) ? '- ' : (int) $list['umum'])?></td>
+            <td class="text-center"><?=(!isset($list['pemilihan_langsung']) ? '- ' : (int) $list['pemilihan_langsung'])?></td>
+            <td class="text-center"><?=(!isset($list['seleksi_umum']) ? '- ' : (int) $list['seleksi_umum'])?></td>
+            <td class="text-center"><?=(!isset($list['seleksi_sederhana']) ? '- ' : (int) $list['seleksi_sederhana'])?></td>
+            <td class="text-center"><?=(!isset($list['barang_jasa']) ? '- ' : (int) $list['barang_jasa'])?></td>
+            <td class="text-center"><?=(!isset($list['konstruksi']) ? '- ' : (int) $list['konstruksi'])?></td>
+            <td class="text-center"><?=(!isset($list['konsultan']) ? '- ' : (int) $list['konsultan'])?></td>
+            <td class="text-center"><?=(!isset($list['e_purchasing']) ? '- ' : (int) $list['e_purchasing'])?></td>
+            <td class="text-center"><?=(!isset($list['penunjukan']) ? '- ' : (int) $list['penunjukan'])?></td>
+            <td class="text-center"><?=(!isset($list['swakelola']) ? '- ' : (int) $list['swakelola'])?></td>
         </tr>
         <?php } ?>
+        <tr>
+            <td></td>
+            <td>Total</td>
+            <?php foreach ($jumlah as $j) { ?>
+                <td class="text-center"><?=empty($j) ? '-' : $j?></td>
+            <?php } ?>
+        </tr>
     </tbody>
 </table>
 

@@ -31,6 +31,19 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
+                      <div class="col-lg-6" style="padding-left: 0 !important;">
+                          <form action="<?=site_url('proyek')?>" class="input-group" method="GET">
+                              <select class="form-control" name="satker_id" id="satker">
+                                  <option value="">Semua</option>
+                                  <?php foreach ($satker as $item): ?>
+                                      <option value="<?=$item->id?>"><?=$item->namasatker?></option>
+                                  <?php endforeach; ?>
+                              </select>
+                              <div class="input-group-btn">
+                                  <button type="submit" class="btn btn-default">Pilih</button>
+                              </div>
+                          </form>
+                      </div>
                     <table id="datatable-buttons" class="table table-striped table-bordered" width="100%">
                       <thead>
                         <tr>

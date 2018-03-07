@@ -233,39 +233,11 @@ require_once("topnav.php");
                                     Dana</label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <select class="form-control" name="sumber_dana" id="sumber_dana">
-                                        <option value="APBD"<?php echo "APBD" == $data['sumber_dana'] ? ' selected="selected"' : ''; ?>>
-                                            APBD
-                                        </option>
-                                        <option value="APBDP"<?php echo "APBDP" == $data['sumber_dana'] ? ' selected="selected"' : ''; ?>>
-                                            APBDP
-                                        </option>
-                                        <option value="APBN"<?php echo "APBN" == $data['sumber_dana'] ? ' selected="selected"' : ''; ?>>
-                                            APBN
-                                        </option>
-                                        <option value="APBNP"<?php echo "APBNP" == $data['sumber_dana'] ? ' selected="selected"' : ''; ?>>
-                                            APBNP
-                                        </option>
-                                        <option value="BLU"<?php echo "BLU" == $data['sumber_dana'] ? ' selected="selected"' : ''; ?>>
-                                            BLU
-                                        </option>
-                                        <option value="BLUD"<?php echo "BLUD" == $data['sumber_dana'] ? ' selected="selected"' : ''; ?>>
-                                            BLUD
-                                        </option>
-                                        <option value="BUMD"<?php echo "BUMD" == $data['sumber_dana'] ? ' selected="selected"' : ''; ?>>
-                                            BUMD
-                                        </option>
-                                        <option value="BUMN"<?php echo "BUMN" == $data['sumber_dana'] ? ' selected="selected"' : ''; ?>>
-                                            BUMN
-                                        </option>
-                                        <option value="Lainnya"<?php echo "Lainnya" == $data['sumber_dana'] ? ' selected="selected"' : ''; ?>>
-                                            Lainnya
-                                        </option>
-                                        <option value="PHLN"<?php echo "PHLN" == $data['sumber_dana'] ? ' selected="selected"' : ''; ?>>
-                                            PHLN
-                                        </option>
-                                        <option value="PNBP"<?php echo "PNBP" == $data['sumber_dana'] ? ' selected="selected"' : ''; ?>>
-                                            PNBP
-                                        </option>
+                                        <?php foreach ($sumber_dana as $sumber) { ?>
+                                            <option value="<?=$sumber->nama?>"<?php echo $sumber->nama == $data['sumber_dana'] ? ' selected="selected"' : ''; ?>>
+                                                <?=$sumber->nama?>
+                                            </option>
+                                        <?php } ?>
                                     </select>
                                 </div>
                             </div>

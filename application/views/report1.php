@@ -16,7 +16,7 @@ $split_tgl = explode("/", $tgl);
 
 $pdf->Cell(335,4,'DATA REALISASI PROSES PENGADAAN BARANG/JASA',0,1,'C');
 $pdf->Cell(335,4,'DI LINGKUNGAN PEMERINTAH KABUPATEN LUMAJANG TAHUN ANGGARAN ' . $this->session->userdata('tahun_anggaran'),0,1,'C');
-$pdf->Cell(335,4,'SAMPAI DENGAN ' . $split_tgl[0] . ' ' . strtoupper($arr_bulan[(int) $split_tgl[1]]) .' ' . $this->session->userdata('tahun_anggaran'), 0, 1,'C');
+$pdf->Cell(335,4,'SAMPAI DENGAN ' . $split_tgl[0] . ' ' . strtoupper($arr_bulan[(int) $split_tgl[1] - 1]) .' ' . $this->session->userdata('tahun_anggaran'), 0, 1,'C');
 $pdf->Ln(5);
 $pdf->SetFont('Arial','',7);
 

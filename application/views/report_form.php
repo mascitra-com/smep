@@ -66,10 +66,9 @@ require_once("topnav.php");
                                     <select class="form-control" name="jenis_report" id="jenis_report">
                                         <option value="report1">Laporan Rekapitulasi Lelang</option>
                                         <option value="report2">Laporan TEPRA</option>
-                                        <option value="report3">Laporan MONEV</option>
                                         <option value="report4">Laporan Jumlah Paket RUP</option>
                                         <option value="report5">Laporan Jumlah Nilai RUP</option>
-                                        <option value="report6">Laporan Pelanksanaan Program</option>
+                                        <option value="report6">Laporan Monev</option>
                                     </select>
                                 </div>
                             </div>
@@ -160,8 +159,13 @@ require_once("topnav.php");
         $('#tgl').daterangepicker({
             singleDatePicker: true,
             singleClasses: "picker_2",
-            startDate: "<?="1/1/".$this->session->userdata('tahun_anggaran')?>",
-            endDate: "<?="31/12/".$this->session->userdata('tahun_anggaran')?>",
+            <?php $tahun = $this->session->userdata('tahun_anggaran');?>
+            <?php if($tahun < date('Y')) { ?>
+            startDate: "<?="31/12/".$tahun?>",
+            <?php } else {?>
+            startDate: "<?=date('d')."/".date('m')."/".$tahun?>",
+            <?php } ?>
+            endDate: "<?="31/12/".$tahun?>",
             locale: {
                 format: 'DD/MM/YYYY'
             }

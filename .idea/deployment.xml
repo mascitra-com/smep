@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="Smep">
+  <component name="PublishConfigData" autoUpload="Always" serverName="Smep">
     <serverData>
-      <paths name="Simbmd">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
       <paths name="Simbmd Jembrana">
         <serverdata>
           <mappings>
@@ -37,6 +30,13 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="Sipas">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="Smep">
         <serverdata>
           <mappings>
@@ -44,20 +44,23 @@
           </mappings>
         </serverdata>
       </paths>
-      <paths name="simbmd_jember">
+      <paths name="Smep Mascitra">
         <serverdata>
           <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
           </mappings>
-        </serverdata>
-      </paths>
-      <paths name="simbmd_pasuruan">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/application/cache" />
+            <excludedPath local="true" path="$PROJECT_DIR$/application/config" />
+            <excludedPath path="/application/cache" />
+            <excludedPath path="/application/config" />
+            <excludedPath local="true" path="$PROJECT_DIR$/system" />
+            <excludedPath path="/system" />
+            <excludedPath path="/system.old" />
+          </excludedPaths>
         </serverdata>
       </paths>
     </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>

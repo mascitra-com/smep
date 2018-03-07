@@ -13,6 +13,7 @@ class Report extends CI_Controller
         if (!in_array($this->session->userdata('level'), array(1, 3, 5))) {
             redirect('/login/', 'refresh');
         }
+        $this->load->helper('utilities');
     }
 
     public function is_logged_in()
@@ -50,6 +51,9 @@ class Report extends CI_Controller
                 break;
             case 'report5':
                 $this->report5($tgl);
+                break;
+            case 'report6':
+                $this->report6($tgl);
                 break;
         }
     }
@@ -166,20 +170,50 @@ class Report extends CI_Controller
             ->get()->result_array();
         $satker = $this->subtitute($this->get_report($tgl), $satker, 'total');
         $data['satker'] = $satker;
-        $data['bulan'] = $tgl;
+        $data['bulan'] = DateTime::createFromFormat('d/m/Y', $tgl)->format('m');
         $this->load->view('report4', $data);
     }
 
     public function report5($tgl)
     {
-        $this->load->helper('utilities');
         $satker = $this->db->select('id, namasatker')
             ->from('satker')
             ->get()->result_array();
         $satker = $this->subtitute($this->get_report($tgl), $satker, 'pagu');
         $data['satker'] = $satker;
-        $data['bulan'] = $tgl;
+        $data['bulan'] = DateTime::createFromFormat('d/m/Y', $tgl)->format('m');
         $this->load->view('report5', $data);
+    }
+
+    public function report6($tgl)
+    {
+        $this->load->model(array('program_m', 'sumber_dana_m'));
+        $this->load->helper('dump');
+        $data['bulan'] = DateTime::createFromFormat('d/m/Y', $tgl)->format('m');
+        $laporan = $this->program_m
+            ->fields('namaprogram')
+            ->with_kegiatan(array(
+                'fields' => 'kdkegiatan, namakegiatan',
+                'with' => array(
+                    'relation' => 'rup',
+                    'fields' => 'id, jenis_belanja_id, nama_paket, lokasi, volume, sumber_dana, pagu, tahun_anggaran',
+                    'with' => array(
+                        'relation' => 'proyek',
+                        'fields' => 'id, nama_ppk, nilai_kontrak, tgl_kontrak, tgl_selesai_kontrak, nama_perusahaan',
+                        'with' => array(
+                            'relation' => 'realisasi_keuangan',
+                            'fields' => 'tgl, jumlah'
+                        )
+                    ),
+                    'where' => "tahun_anggaran = " . $this->session->userdata('tahun_anggaran')
+                ),
+            ))
+            ->as_array()
+            ->get_all();
+        $laporan = $this->program_m->filter_proyek($laporan);
+        $data['program'] = $laporan;
+        $data['sumber_dana'] = $this->sumber_dana_m->get_all();
+        $this->load->view('report6', $data);
     }
 
     /**
@@ -190,10 +224,10 @@ class Report extends CI_Controller
     private function subtitute($condition, $satker, $column)
     {
         foreach ($condition as $keyCondition => $cond) {
-            foreach ($cond as $keyCond => $c){
+            foreach ($cond as $keyCond => $c) {
                 foreach ($satker as $keySatker => $satuan) {
                     if ($c['id_satker'] == $satuan['id']) {
-                        $satker["{$keySatker}"]["{$keyCondition}"] = (int) $c["{$column}"];
+                        $satker["{$keySatker}"]["{$keyCondition}"] = (int)$c["{$column}"];
                     }
                 }
             }
@@ -206,7 +240,7 @@ class Report extends CI_Controller
      */
     private function get_report($tgl = NULL)
     {
-        $bulan = "(rup.metode_awal BETWEEN 1 AND ".date('m', strtotime($tgl)) . ")";
+        $bulan = "(rup.metode_awal BETWEEN 1 AND " . (int)DateTime::createFromFormat('d/m/Y', $tgl)->format('m') . ")";
         // Master Query
         $this->db->start_cache();
         $this->db->select('satker.id as id_satker, count(rup.satker_id) as total, SUM(rup.pagu) as pagu')

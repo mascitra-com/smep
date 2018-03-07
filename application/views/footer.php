@@ -11,6 +11,8 @@
 
     <!-- jQuery -->
     <script src="<?php echo base_url(); ?>libs/vendors/jquery/dist/jquery.min.js"></script>
+    <!-- jQuery Number-->
+    <script src="<?php echo base_url(); ?>libs/vendors/jquery.number/jquery.number.min.js"></script>
     <!-- Bootstrap -->
     <script src="<?php echo base_url(); ?>libs/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- FastClick -->

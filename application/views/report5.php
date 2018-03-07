@@ -23,18 +23,21 @@
         table, th, td {
             border: 1px solid black;
         }
+
         thead {
             font-size: 9pt;
         }
+
         tbody {
             font-size: 7pt;
         }
     </style>
 </head>
 <body>
-<?php $arr_bulan = array('Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','Nopember','Desember'); ?>
+<?php $arr_bulan = array('Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'Nopember', 'Desember'); ?>
 
-<h5 align="center">REKAP JUMLAH PAKET RUP PER BULAN <?=strtoupper($arr_bulan[$bulan-1])?> <?=$this->session->userdata('tahun_anggaran')?></h5>
+<h5 align="center">REKAP JUMLAH PAKET RUP PER
+    BULAN <?= strtoupper($arr_bulan[$bulan - 1]) ?> <?= $this->session->userdata('tahun_anggaran') ?></h5>
 
 <table width="100%">
     <thead>
@@ -66,33 +69,45 @@
     </tr>
     </thead>
     <tbody>
-        <?php $i = 1; foreach ($satker as $list) { ?>
+    <?php $i = 1;
+    $keys = array('total', 'lelang_umum', 'lelang_sederhana', 'umum', 'pemilihan_langsung', 'seleksi_umum',
+        'seleksi_sederhana', 'barang_jasa', 'konstruksi', 'konsultan', 'e_purchasing', 'penunjukan', 'swakelola');
+    $jumlah = array_fill_keys($keys, 0);
+    foreach ($satker as $list) {
+        foreach ($keys as $key) {
+            $jumlah["{$key}"] += isset($list["{$key}"]) ? (int)$list["{$key}"] : 0;
+        }
+        ?>
         <tr>
-            <td class="text-center"><?=$i++?></td>
-            <td><?=$list['namasatker']?></td>
-            <td class="text-right pagu"><?=empty($list['total']) ? '-' : monefy($list['total'])?></td>
-            <td class="text-right pagu"><?=empty($list['lelang_umum']) ? '-' : monefy($list['lelang_umum'])?></td>
-            <td class="text-right pagu"><?=empty($list['lelang_sederhana']) ? '-' : monefy($list['lelang_sederhana'])?></td>
-            <td class="text-right pagu"><?=empty($list['umum']) ? '-' : monefy($list['umum'])?></td>
-            <td class="text-right pagu"><?=empty($list['pemilihan_langsung']) ? '-' : monefy($list['pemilihan_langsung'])?></td>
-            <td class="text-right pagu"><?=empty($list['seleksi_umum']) ? '-' : monefy($list['seleksi_umum'])?></td>
-            <td class="text-right pagu"><?=empty($list['seleksi_sederhana']) ? '-' : monefy($list['seleksi_sederhana'])?></td>
-            <td class="text-right pagu"><?=empty($list['barang_jasa']) ? '-' : monefy($list['barang_jasa'])?></td>
-            <td class="text-right pagu"><?=empty($list['konstruksi']) ? '-' : monefy($list['konstruksi'])?></td>
-            <td class="text-right pagu"><?=empty($list['konsultan']) ? '-' : monefy($list['konsultan'])?></td>
-            <td class="text-right pagu"><?=empty($list['e_purchasing']) ? '-' : monefy($list['e_purchasing'])?></td>
-            <td class="text-right pagu"><?=empty($list['penunjukan']) ? '-' : monefy($list['penunjukan'])?></td>
-            <td class="text-right pagu"><?=empty($list['swakelola']) ? '-' : monefy($list['swakelola'])?></td>
+            <td class="text-center"><?= $i++ ?></td>
+            <td><?= $list['namasatker'] ?></td>
+            <td class="text-right pagu"><?= empty($list['total']) ? '- ' : monefy($list['total']) ?></td>
+            <td class="text-right pagu"><?= empty($list['lelang_umum']) ? '- ' : monefy($list['lelang_umum']) ?></td>
+            <td class="text-right pagu"><?= empty($list['lelang_sederhana']) ? '- ' : monefy($list['lelang_sederhana']) ?></td>
+            <td class="text-right pagu"><?= empty($list['umum']) ? '- ' : monefy($list['umum']) ?></td>
+            <td class="text-right pagu"><?= empty($list['pemilihan_langsung']) ? '- ' : monefy($list['pemilihan_langsung']) ?></td>
+            <td class="text-right pagu"><?= empty($list['seleksi_umum']) ? '- ' : monefy($list['seleksi_umum']) ?></td>
+            <td class="text-right pagu"><?= empty($list['seleksi_sederhana']) ? '- ' : monefy($list['seleksi_sederhana']) ?></td>
+            <td class="text-right pagu"><?= empty($list['barang_jasa']) ? '- ' : monefy($list['barang_jasa']) ?></td>
+            <td class="text-right pagu"><?= empty($list['konstruksi']) ? '- ' : monefy($list['konstruksi']) ?></td>
+            <td class="text-right pagu"><?= empty($list['konsultan']) ? '- ' : monefy($list['konsultan']) ?></td>
+            <td class="text-right pagu"><?= empty($list['e_purchasing']) ? '- ' : monefy($list['e_purchasing']) ?></td>
+            <td class="text-right pagu"><?= empty($list['penunjukan']) ? '- ' : monefy($list['penunjukan']) ?></td>
+            <td class="text-right pagu"><?= empty($list['swakelola']) ? '- ' : monefy($list['swakelola']) ?></td>
         </tr>
+    <?php } ?>
+    <tr>
+        <td></td>
+        <td>Total</td>
+        <?php foreach ($jumlah as $j) { ?>
+            <td class="text-center"><?=empty($j) ? '-' : monefy($j)?></td>
         <?php } ?>
+    </tr>
     </tbody>
 </table>
 
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/df-number-format/2.1.6/jquery.number.min.js"></script>
 <script>
-//    $('td.pagu').number( true, 0, ',', '.' );
-//    window.print();
+    window.print();
 </script>
 </html>
