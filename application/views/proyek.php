@@ -36,7 +36,7 @@
                               <select class="form-control" name="satker_id" id="satker">
                                   <option value="">Semua</option>
                                   <?php foreach ($satker as $item): ?>
-                                      <option value="<?=$item->id?>"><?=$item->namasatker?></option>
+                                      <option value="<?=$item->id?>" <?=isset($satker_id) && $item->id == $satker_id ? 'selected' : ''?>><?=$item->namasatker?></option>
                                   <?php endforeach; ?>
                               </select>
                               <div class="input-group-btn">
