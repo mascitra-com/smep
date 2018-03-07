@@ -28,6 +28,7 @@ class Proyek extends CI_Controller {
 			$filter = sprintf(" AND b.satker_id=%d", $this->session->userdata('satker_id'));
 		} else if($satker_id = $this->input->get('satker_id')){
             $filter = sprintf(" AND b.satker_id=%d", $satker_id);
+            $data['satker_id'] = $satker_id;
         }
 
 		$sql = sprintf("
@@ -50,15 +51,15 @@ class Proyek extends CI_Controller {
 			", $this->session->userdata('tahun_anggaran'));
 
 		$q = $this->db->query($sql)->result_object();
-		
-	    
+
+
 		foreach($q as $key => $value) {
 		    $this->db->select('a.id, a.proyek_id, a.sumber_dana_id, b.nama');
 		    $this->db->from('proyek_sumber_dana a');
 		    $this->db->join('sumber_dana b', 'a.sumber_dana_id = b.id');
 		    $this->db->where('proyek_id',$value->id);
             $q_sumber_dana = $this->db->get();
-    		$sdana =  $q_sumber_dana->result_object();			
+    		$sdana =  $q_sumber_dana->result_object();
 			$sumberdana = '';
 			foreach($sdana as $s) {
 		        $sumberdana .= ($s->nama ." ");
@@ -69,7 +70,6 @@ class Proyek extends CI_Controller {
 
         $q=$this->db->get('satker');
         $data['satker'] = $q->result_object();
-
         $this->load->view('proyek', $data);
     }
 

@@ -26,6 +26,7 @@ class Rup extends CI_Controller {
 		if ($this->session->userdata('level') == 4 || $this->session->userdata('level') == 6) {
 			$filter = sprintf(" AND a.satker_id=%d", $this->session->userdata('satker_id'));
 		} else if($satker_id = $this->input->get('satker_id')){
+            $data['satker_id'] = $satker_id;
             $filter = sprintf(" AND a.satker_id=%d", $satker_id);
         }
 		$sql = sprintf("
